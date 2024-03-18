@@ -1,0 +1,23 @@
+persistent_storage = "./persist"
+
+[fizikal]
+api_base_url = "https://api.fizikal.co.il"
+# START Don't Touch #
+OrganizationId = 1
+companyId = 230
+branchId = 14
+sourceId = 1
+authenticationTypeId = 1
+# END Don't Touch #
+
+# Change below:
+phone_number = "0546529940"
+get_classes_every_x_hours = 100
+remove_classes_every_x_hours = 1
+register_classes_every_x_hours = 1
+
+[google_sheets]
+service_account_key = "creds/google_api_key.json"
+spreadsheet_name = "Fizikal"
+sheet_name = "Sunday"
+polling_interval_minutes = 1
