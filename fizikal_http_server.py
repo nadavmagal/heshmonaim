@@ -34,6 +34,7 @@ def __init_config(config_file: str = "config.toml"):
 
     google_sheets_config = config.get("google_sheets", {})
     fizikal_config = config.get("fizikal", {})
+
     phone_number = fizikal_config.get("phone_number", None)
     if not phone_number:
         print("Phone number not specified in config file")

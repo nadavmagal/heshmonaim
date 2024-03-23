@@ -10,6 +10,7 @@ import datetime
 class FizikalAPI:
     def __init__(self, fizikal_config={}, persistent_storage="", mock=False):
         self.base_url = fizikal_config.get("api_base_url", "")
+
         self.phone_number = fizikal_config.get("phone_number", "")
         if not self.base_url:
             raise Exception("FizikalAPI: Base URL not specified")

@@ -47,7 +47,16 @@ class FizikalManager:
         self.__init_config(config_file)
         self._init_logging()
         self._init_api()
-        self._init_google_sheets()
+
+        if self.config['use_gsheet']:
+            self._init_google_sheets()
+        else:
+            self._init_csv()
+
+    def _init_csv(self):
+        self.pd = pd.DataFrame()
+        self.pd.to_csv(self.config['csv']['csv_name'])
+        logging.log(logging.INFO, "CSV initialized")
 
     def __init_config(self, config_file: str = "config.toml"):
         if not config_file:
@@ -78,7 +87,7 @@ class FizikalManager:
                 print(f"{key} not specified in google_sheets config")
                 exit(1)
         self.google_sheet_rw = GoogleSheetReaderWriter(
-            self.google_sheets_config["spreadsheet_name"],
+            self.google_sheets_config["spreadsheet_id"],
             self.google_sheets_config["service_account_key"],
             self.google_sheets_config["sheet_name"],
         )
@@ -441,12 +450,15 @@ class FizikalManager:
         sheet_content = self.google_sheet_rw.read_cells()
         if len(sheet_content) > 0:
             self.classes = sheet_content
-        self.classes["as_date"] = self.classes.apply(
-                    lambda y: datetime.date(
-                        *[int(d) for d in y["dateRequest"].split("-")]
-                    ),
-                    axis=1,
-                )
+        if False:
+            self.classes["as_date"] = self.classes.apply(
+                        lambda y: datetime.date(
+                            *[int(d) for d in y["dateRequest"].split("-")]
+                        ),
+                        axis=1,
+                    )
+        else:
+            print("I skipped something here. maybe put it again")
 
     def write_classes_to_google_sheets(self, classes=None):
         if classes is None:

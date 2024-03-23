@@ -4,13 +4,22 @@ import pandas as pd
 
 class GoogleSheetReaderWriter:
     def __init__(
-        self, spreadsheet_name: str, credentials_file: str = "", sheet_name: str = ""
+        self, spreadsheet_id: str, credentials_file: str = "", sheet_name: str = ""
     ):
         if not credentials_file:
             raise Exception("GoogleSheetReaderWriter: Credentials file not specified")
-        self.spreadsheet_name = spreadsheet_name
+        self.spreadsheet_id = spreadsheet_id
         self.client = pygsheets.authorize(service_file=credentials_file)
-        self.spreadsheet = self.client.open(self.spreadsheet_name)
+
+        try:
+            # Attempt to open the spreadsheet by title
+            # self.spreadsheet = self.client.open(self.spreadsheet_name)
+            self.spreadsheet = self.client.open_by_key(self.spreadsheet_id)
+            print(f"Opened spreadsheet: {self.spreadsheet_id} (ID: {self.spreadsheet.id})")
+        except pygsheets.SpreadsheetNotFound:
+            print(f"Spreadsheet '{self.spreadsheet_id}' not found.")
+
+
 
     def write_cells(self, df: pd.DataFrame, sheet_name: str):
         # Clear the existing content of the worksheet
